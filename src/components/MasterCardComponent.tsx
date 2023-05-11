@@ -1,5 +1,8 @@
+import ErrorMessage from "./ErrorComponenet";
 import { Button, Card } from "flowbite-react";
 import { Master } from "../types/MasterTypes";
+import SuccessMessage from "./SuccessMessage";
+import UseApplyForMaster from "../hooks/UseApplyForMaste";
 
 interface IMasterCardComponentProps {
   master: Master;
@@ -13,6 +16,8 @@ const formatDate = (dateStr: string) => {
 const MasterCardComponent: React.FC<IMasterCardComponentProps> = ({
   master,
 }) => {
+  const { success, applyToMaster, error } = UseApplyForMaster();
+
   return (
     <Card className="mb-5">
       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -27,7 +32,9 @@ const MasterCardComponent: React.FC<IMasterCardComponentProps> = ({
         <li>closing date : {formatDate(master.closing_date)} </li>
       </ul>
 
-      <Button>Apply</Button>
+      {error.isError && <ErrorMessage message={error.msg} />}
+      {success.isSuccess && <SuccessMessage message={success.message} />}
+      <Button onClick={() => applyToMaster(master.id)}>Apply</Button>
     </Card>
   );
 };
