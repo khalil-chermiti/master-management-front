@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { useState } from "react";
 import UseError from "./UseError";
+import { useNavigate } from "react-router-dom";
 import candidateSignupAPI from "../apis/CandidateSignupApi";
 import { ICandidateSignupInput } from "../types/CandidateTypes";
-import { useNavigate } from "react-router-dom";
 
 function UseCandidateFromInput() {
   const [candidateInput, setCandidateInput] = useState<ICandidateSignupInput>({

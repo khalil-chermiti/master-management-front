@@ -1,11 +1,12 @@
 import { useContext } from "react";
+import { Navbar } from "flowbite-react";
+import UserComponent from "./UserComponent";
 import { useNavigate } from "react-router-dom";
 import { authContext } from "../contexts/AuthContext";
-import { Navbar, Dropdown, Avatar } from "flowbite-react";
 
 const NavBarComponent = () => {
   const navigate = useNavigate();
-  const auth = useContext(authContext);
+  const { auth } = useContext(authContext)!;
 
   return (
     <Navbar fluid={true} rounded={true}>
@@ -22,36 +23,7 @@ const NavBarComponent = () => {
           Master
         </span>
       </Navbar.Brand>
-      {auth?.auth.isAuth ? (
-        <div className="flex md:order-2">
-          <Dropdown
-            arrowIcon={false}
-            inline={true}
-            label={
-              <Avatar
-                alt="User settings"
-                img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                rounded={true}
-              />
-            }
-          >
-            <Dropdown.Header>
-              <span className="block text-sm">Bonnie Green</span>
-              <span className="block truncate text-sm font-medium">
-                name@flowbite.com
-              </span>
-            </Dropdown.Header>
-            <Dropdown.Item>Account</Dropdown.Item>
-            <Dropdown.Item>My Applications</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item onClick={() => auth.logout()}>
-              Sign out
-            </Dropdown.Item>
-          </Dropdown>
-        </div>
-      ) : (
-        ""
-      )}
+      {auth.isAuth ? <UserComponent user={auth.user!} /> : ""}
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Navbar.Link
@@ -60,7 +32,7 @@ const NavBarComponent = () => {
         >
           Masters List
         </Navbar.Link>
-        {auth?.auth.isAuth === false ? (
+        {auth.isAuth === false ? (
           <>
             <Navbar.Link
               className="cursor-pointer"

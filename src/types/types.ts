@@ -1,3 +1,5 @@
+import { Candidate } from "./CandidateTypes";
+
 export class ResponseSuccess<T> {
   public success: true;
 
@@ -34,4 +36,5 @@ export interface IAuth {
   isAuth: boolean;
   token: string | null;
   role: USER_TYPE;
+  user: Omit<Candidate, "password"> | null;
 }

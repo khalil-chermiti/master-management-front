@@ -6,14 +6,26 @@ import MasterListPage from "./pages/MasterListPage";
 import { authContext } from "./contexts/AuthContext";
 import NavBarComponent from "./components/NavBarComponent";
 import CandidateSignupPage from "./pages/CandidateSignupPage";
+import getLoggedCandidateAPI from "./apis/GetLoggedCandidateApi";
 
 function App() {
-  const auth = useContext(authContext);
+  const { hydrateAuth, auth, setCandidate } = useContext(authContext)!;
   console.log(auth);
 
   useEffect(() => {
-    if (auth) auth.hydrateAuth();
-  }, [auth]);
+    hydrateAuth();
+  }, []);
+
+  useEffect(() => {
+    async function getCandidate() {
+      const response = await getLoggedCandidateAPI(auth.token);
+      if (response.success === true) {
+        console.log(response.data);
+        setCandidate(response.data);
+      }
+    }
+    getCandidate();
+  }, []);
 
   return (
     <>

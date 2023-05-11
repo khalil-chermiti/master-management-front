@@ -1,11 +1,13 @@
 import React, { createContext, useState } from "react";
 import type { IAuth } from "../types/types";
+import { Candidate } from "../types/CandidateTypes";
 
 interface IAuthContext {
   auth: IAuth;
   logout: () => void;
   setToken: (token: string) => void;
   hydrateAuth: () => void;
+  setCandidate: (candidate: Omit<Candidate, "password">) => void;
 }
 
 interface IAuthContextProviderProps {
@@ -34,12 +36,28 @@ export const AuthContextProvider: React.FC<IAuthContextProviderProps> = ({
     isAuth: false,
     token: null,
     role: "CANDIDATE",
+    user: null,
   });
 
   /**set new token after sign in success*/
   const setToken = (token: string) => {
     setAuth(prev => ({ ...prev, isAuth: true, token: token }));
-    setAuthToLocalStorage({ isAuth: true, token: token, role: auth.role });
+    setAuthToLocalStorage({
+      isAuth: true,
+      token: token,
+      role: auth.role,
+      user: auth.user,
+    });
+  };
+
+  const setCandidate = (candidate: Omit<Candidate, "password">) => {
+    setAuth(prev => ({ ...prev, user: candidate }));
+    setAuthToLocalStorage({
+      isAuth: true,
+      token: auth.token,
+      role: auth.role,
+      user: candidate,
+    });
   };
 
   const getAuthFromLocalStorage = () => {
@@ -66,7 +84,9 @@ export const AuthContextProvider: React.FC<IAuthContextProviderProps> = ({
   };
 
   return (
-    <authContext.Provider value={{ logout, setToken, auth, hydrateAuth }}>
+    <authContext.Provider
+      value={{ logout, setToken, auth, hydrateAuth, setCandidate }}
+    >
       {children}
     </authContext.Provider>
   );

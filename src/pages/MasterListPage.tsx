@@ -1,7 +1,7 @@
+import UseError from "../hooks/UseError";
 import { useEffect, useState } from "react";
 import { Master } from "../types/MasterTypes";
 import GetMaterApi from "../apis/GetMaterApi";
-import UseError from "../hooks/UseError";
 import MasterCardComponent from "../components/MasterCardComponent";
 
 const MasterListPage = () => {
@@ -18,7 +18,7 @@ const MasterListPage = () => {
       setNotLoading();
     };
     fetchMasterList();
-  }, [setErrorMsg, setIsLoading, setNotLoading]);
+  }, []);
 
   if (masterList.length === 0) return <h1>no masters</h1>;
   if (error.isError) return <h1>{error.msg}</h1>;
