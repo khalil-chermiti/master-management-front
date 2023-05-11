@@ -29,3 +29,9 @@ export class ResponseError {
 export type ResponseData<T> = ResponseSuccess<T> | ResponseError;
 
 export type USER_TYPE = "ADMIN" | "CANDIDATE";
+
+export interface IAuth {
+  isAuth: boolean;
+  token: string | null;
+  role: USER_TYPE;
+}
