@@ -10,15 +10,15 @@ const BadgeComponent: React.FC<IBadgeProps> = ({ status }) => {
     case "PENDING":
       return (
         <Badge style={{ display: "inline-block" }} color="info">
-          Default
+          Pending
         </Badge>
       );
     case "ACCEPTED":
-      return <Badge color="success">Default</Badge>;
+      return <Badge color="success">Accepted</Badge>;
     case "REJECTED":
-      return <Badge color="danger">Default</Badge>;
+      return <Badge color="danger">Rejected</Badge>;
     default:
-      return <Badge color="info">Unknow</Badge>;
+      return <Badge color="info">Unknown</Badge>;
   }
 };
 

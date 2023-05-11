@@ -26,7 +26,7 @@ const ApplicationsPage = () => {
         Applications
       </h1>
       {applications.map(application => (
-        <ApplicationComponent application={application} />
+        <ApplicationComponent key={application.id} application={application} />
       ))}
     </section>
   );

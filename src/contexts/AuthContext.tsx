@@ -1,6 +1,7 @@
 import React, { createContext, useState } from "react";
 import type { IAuth } from "../types/types";
 import { Candidate } from "../types/CandidateTypes";
+import getLoggedCandidateAPI from "../apis/GetLoggedCandidateApi";
 
 interface IAuthContext {
   auth: IAuth;
@@ -40,14 +41,17 @@ export const AuthContextProvider: React.FC<IAuthContextProviderProps> = ({
   });
 
   /**set new token after sign in success*/
-  const setToken = (token: string) => {
+  const setToken = async (token: string) => {
     setAuth(prev => ({ ...prev, isAuth: true, token: token }));
-    setAuthToLocalStorage({
-      isAuth: true,
-      token: token,
-      role: auth.role,
-      user: auth.user,
-    });
+    const response = await getLoggedCandidateAPI(token);
+    if (response.success) {
+      setAuthToLocalStorage({
+        isAuth: true,
+        token: token,
+        role: auth.role,
+        user: response.data,
+      });
+    }
   };
 
   const setCandidate = (candidate: Omit<Candidate, "password">) => {

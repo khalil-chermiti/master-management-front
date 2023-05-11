@@ -13,8 +13,14 @@ function App() {
   const { hydrateAuth, auth, setCandidate } = useContext(authContext)!;
 
   useEffect(() => {
-    hydrateAuth();
-  }, []);
+    async function hydrateAndGetLoggedCandidate() {
+      hydrateAuth();
+      console.log(auth.token);
+      const candidate = await getLoggedCandidateAPI(auth.token);
+      if (candidate.success === true) setCandidate(candidate.data);
+    }
+    hydrateAndGetLoggedCandidate();
+  }, [auth.token]);
 
   useEffect(() => {
     async function getCandidate() {
