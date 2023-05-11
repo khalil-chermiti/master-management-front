@@ -1,5 +1,5 @@
-import { ResponseData } from "../types";
-import { Candidate, ICandidateSignupInput } from "./CandidateTypes";
+import { ResponseData } from "../types/types";
+import { Candidate, ICandidateSignupInput } from "../types/CandidateTypes";
 
 const CANDIDATE_SIGNUP_API_URL = "http://localhost:3000/candidate/signup";
 

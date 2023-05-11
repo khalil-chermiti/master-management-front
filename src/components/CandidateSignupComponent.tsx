@@ -1,18 +1,22 @@
-import UseCandidateFromInput from "./UseCandidateSignup";
+import UseCandidateFromInput from "../hooks/UseCandidateSignup";
 import { Label, Button, TextInput, Alert, Spinner } from "flowbite-react";
 
 function CandidateSignup() {
-  const { signupError, handleCandidateLogin, setCandidateInputValue } =
+  const { error, handleCandidateLogin, setCandidateInputValue } =
     UseCandidateFromInput();
 
   return (
     <form
-      className="flex flex-col gap-4"
+      className="flex flex-col gap-4 xl:w-1/3 lg:w-1/2 md:w-2/3 sm:w-3/4 w-full m-auto p-3"
       onSubmit={event => {
         event.preventDefault();
         handleCandidateLogin();
       }}
     >
+      <h1 className="text-center mb-4 text-2xl font-extrabold leading-none tracking-tight text-blue-800 md:text-5xl lg:text-5xl dark:text-white">
+        Sign up
+      </h1>
+
       {/* first_name */}
       <div>
         <div className="mb-2 block">
@@ -170,17 +174,17 @@ function CandidateSignup() {
         />
       </div>
 
-      {signupError.isError ? (
+      {error.isError ? (
         <Alert color="warning" rounded={true}>
           <span>
-            <span className="font-medium">Error : </span> {signupError.msg}
+            <span className="font-medium">Error : </span> {error.msg}
           </span>
         </Alert>
       ) : (
         ""
       )}
 
-      {signupError.isLoading ? (
+      {error.isLoading ? (
         <Spinner style={{ margin: "auto" }} size="xl" />
       ) : (
         <Button type="submit">Sign up</Button>

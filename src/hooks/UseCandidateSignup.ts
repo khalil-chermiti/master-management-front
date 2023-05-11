@@ -1,7 +1,9 @@
 import { z } from "zod";
 import { useState } from "react";
-import candidateSignupAPI from "./CandidateSignupApi";
-import { ICandidateSignupInput } from "./CandidateTypes";
+import UseError from "./UseError";
+import candidateSignupAPI from "../apis/CandidateSignupApi";
+import { ICandidateSignupInput } from "../types/CandidateTypes";
+import { useNavigate } from "react-router-dom";
 
 function UseCandidateFromInput() {
   const [candidateInput, setCandidateInput] = useState<ICandidateSignupInput>({
@@ -19,29 +21,10 @@ function UseCandidateFromInput() {
     postal_code: 0,
   });
 
-  const [signupError, setSignupError] = useState({
-    isError: false,
-    isLoading: false,
-    msg: "",
-  });
+  const { clearErrorMsg, setErrorMsg, error, setIsLoading, setNotLoading } =
+    UseError();
 
-  const setErrorMsg = (msg: string) => {
-    setSignupError({ isError: true, isLoading: false, msg });
-  };
-
-  const clearErrorMsg = () => {
-    setSignupError({
-      isError: false,
-      isLoading: false,
-      msg: "",
-    });
-  };
-
-  const setIsLoading = () =>
-    setSignupError(prev => ({ ...prev, isLoading: true }));
-
-  const setNotLoading = () =>
-    setSignupError(prev => ({ ...prev, isLoading: false }));
+  const navigate = useNavigate();
 
   const setCandidateInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     clearErrorMsg();
@@ -104,13 +87,14 @@ function UseCandidateFromInput() {
       const result = await candidateSignupAPI(candidateInput);
       if (result.success === false) {
         setErrorMsg(result.error);
+        navigate("/candidate/signin");
       }
       setNotLoading();
     }
   };
 
   return {
-    signupError,
+    error,
     handleCandidateLogin,
     setCandidateInputValue,
   };

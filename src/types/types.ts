@@ -27,3 +27,5 @@ export class ResponseError {
 }
 
 export type ResponseData<T> = ResponseSuccess<T> | ResponseError;
+
+export type USER_TYPE = "ADMIN" | "CANDIDATE";
