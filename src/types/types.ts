@@ -38,3 +38,4 @@ export interface IAuth {
   role: USER_TYPE;
   user: Omit<Candidate, "password"> | null;
 }
+
