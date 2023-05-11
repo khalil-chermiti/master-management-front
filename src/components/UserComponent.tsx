@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { Dropdown, Avatar } from "flowbite-react";
 import { Candidate } from "../types/CandidateTypes";
 import { authContext } from "../contexts/AuthContext";
@@ -8,6 +9,7 @@ interface IUserProps {
 }
 
 const UserComponent: React.FC<IUserProps> = ({ user }) => {
+  const navigate = useNavigate();
   const { logout } = useContext(authContext)!;
 
   if (!user) return <></>;
@@ -33,7 +35,9 @@ const UserComponent: React.FC<IUserProps> = ({ user }) => {
           </span>
         </Dropdown.Header>
         <Dropdown.Item>Account</Dropdown.Item>
-        <Dropdown.Item>My Applications</Dropdown.Item>
+        <Dropdown.Item onClick={() => navigate("/applications")}>
+          Applications
+        </Dropdown.Item>
         <Dropdown.Divider />
         <Dropdown.Item onClick={() => logout()}>Sign out</Dropdown.Item>
       </Dropdown>

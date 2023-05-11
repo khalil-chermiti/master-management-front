@@ -1,7 +1,7 @@
 import UseError from "../hooks/UseError";
 import { useEffect, useState } from "react";
 import { Master } from "../types/MasterTypes";
-import GetMaterApi from "../apis/GetMaterApi";
+import GetMasterApi from "../apis/GetMasterApi";
 import MasterCardComponent from "../components/MasterCardComponent";
 
 const MasterListPage = () => {
@@ -11,8 +11,7 @@ const MasterListPage = () => {
   useEffect(() => {
     const fetchMasterList = async () => {
       setIsLoading();
-      const response = await GetMaterApi();
-      console.log(response);
+      const response = await GetMasterApi();
       if (response.success === true) setMasterList(response.data.masters);
       if (response.success === false) setErrorMsg(response.error);
       setNotLoading();

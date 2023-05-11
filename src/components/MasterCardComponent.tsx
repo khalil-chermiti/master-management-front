@@ -17,7 +17,6 @@ const MasterCardComponent: React.FC<IMasterCardComponentProps> = ({
   master,
 }) => {
   const { success, applyToMaster, error } = UseApplyForMaster();
-
   return (
     <Card className="mb-5">
       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
