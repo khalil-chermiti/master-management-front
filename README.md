@@ -9,6 +9,7 @@ this App Allows :
 ## Screenshots
 
 ![App Screenshot](demo.png)
+![App Screenshot](demo2.png)
 
 ## Installation
 
