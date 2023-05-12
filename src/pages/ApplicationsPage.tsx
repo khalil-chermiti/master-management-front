@@ -8,6 +8,9 @@ const ApplicationsPage = () => {
   const [applications, setApplicaitons] = useState<ApplicationPopulated[]>([]);
   const { auth, hydrateAuth } = useContext(authContext)!;
 
+  const removeApplicationFromList = (application_id: number) =>
+    setApplicaitons(applications.filter(app => app.id !== application_id));
+
   useEffect(() => {
     hydrateAuth();
     async function getApplications() {
@@ -26,7 +29,11 @@ const ApplicationsPage = () => {
         Applications
       </h1>
       {applications.map(application => (
-        <ApplicationComponent key={application.id} application={application} />
+        <ApplicationComponent
+          key={application.id}
+          application={application}
+          removeApplication={removeApplicationFromList}
+        />
       ))}
     </section>
   );

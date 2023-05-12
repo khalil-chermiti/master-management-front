@@ -1,11 +1,24 @@
 import React from "react";
-import { Card } from "flowbite-react";
+import { Alert, Button, Card } from "flowbite-react";
 import BadgeComponent from "./BadgeComponent";
 import { ApplicationPopulated } from "../types/ApplicaitonTypes";
+import useCancelApplication from "../hooks/UseCancelApplication";
 
-const ApplicationComponent: React.FC<{ application: ApplicationPopulated }> = ({
+interface IApplicationComponentProps {
+  removeApplication: (application_id: number) => void;
+  application: ApplicationPopulated;
+}
+
+const ApplicationComponent: React.FC<IApplicationComponentProps> = ({
   application,
+  removeApplication,
 }) => {
+  const { error, cancelApplication } = useCancelApplication();
+
+  const handleRemoveApplication = async () => {
+    const result = await cancelApplication(application.id);
+    if (result) removeApplication(application.id);
+  };
   return (
     <Card className="mb-5">
       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -25,6 +38,23 @@ const ApplicationComponent: React.FC<{ application: ApplicationPopulated }> = ({
         <li>application date : {application.application_date} </li>
         <li>closing date : {application.master.closing_date} </li>
       </ul>
+      {error.isError ? (
+        <Alert color="warning" rounded={true}>
+          <span>
+            <span className="font-medium">Error : </span> {error.msg}
+          </span>
+        </Alert>
+      ) : (
+        ""
+      )}
+      <Button
+        onClick={() => {
+          handleRemoveApplication();
+        }}
+        color="failure"
+      >
+        Cancel Application
+      </Button>
     </Card>
   );
 };
