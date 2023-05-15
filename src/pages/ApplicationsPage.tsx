@@ -1,24 +1,40 @@
+import { useContext, useEffect } from "react";
 import { authContext } from "../contexts/AuthContext";
-import { useContext, useEffect, useState } from "react";
 import FetchApplicationsApi from "../apis/FetchApplicationsApi";
-import { ApplicationPopulated } from "../types/ApplicaitonTypes";
 import ApplicationComponent from "../components/ApplicationComponent";
+import { applicationsContext } from "../contexts/ApplicationsContext";
 
 const ApplicationsPage = () => {
-  const [applications, setApplicaitons] = useState<ApplicationPopulated[]>([]);
-  const { auth, hydrateAuth } = useContext(authContext)!;
+  const { auth } = useContext(authContext)!;
 
-  const removeApplicationFromList = (application_id: number) =>
-    setApplicaitons(applications.filter(app => app.id !== application_id));
+  const {
+    applications,
+    addApplication,
+    hydrateApplications,
+    persistApplications,
+  } = useContext(applicationsContext)!;
 
+  // fetch applications when token is hydrated from local storage
   useEffect(() => {
-    hydrateAuth();
     async function getApplications() {
-      const response = await FetchApplicationsApi(auth.token);
-      if (response.success === true) setApplicaitons([...response.data]);
+      if (auth.token) {
+        const response = await FetchApplicationsApi(auth.token);
+        if (response.success === true)
+          response.data.forEach(application => addApplication(application));
+      }
     }
     getApplications();
   }, [auth.token]);
+
+  // hydrate Applications list from local storage
+  useEffect(() => {
+    hydrateApplications();
+  });
+
+  // persist Applications to local storage
+  useEffect(() => {
+    persistApplications();
+  }, [applications]);
 
   return (
     <section
@@ -29,11 +45,7 @@ const ApplicationsPage = () => {
         Applications
       </h1>
       {applications.map(application => (
-        <ApplicationComponent
-          key={application.id}
-          application={application}
-          removeApplication={removeApplicationFromList}
-        />
+        <ApplicationComponent key={application.id} application={application} />
       ))}
     </section>
   );

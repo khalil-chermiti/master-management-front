@@ -19,7 +19,6 @@ const CancelApplicationAPI = async (
 
     return (await response.json()) as ResponseData<Application>;
   } catch (error: any) {
-    console.log(error);
     return {
       success: false,
       error: "something went wrong please try again",

@@ -10,15 +10,15 @@ const useCancelApplication = () => {
   const cancelApplication = async (application_id: number) => {
     const response = await CancelApplicationAPI(auth.token, application_id);
 
-    if (response.success === false) {
-      setErrorMsg(response.error);
-      console.log(response.error);
-      return false;
-    }
+    // in case of success
     if (response.success === true) {
       clearErrorMsg();
       return true;
     }
+
+    // in case of an error
+    setErrorMsg(response.error);
+    return false;
   };
 
   return { error, cancelApplication };

@@ -1,24 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Alert, Button, Card } from "flowbite-react";
 import BadgeComponent from "./BadgeComponent";
 import { ApplicationPopulated } from "../types/ApplicaitonTypes";
 import useCancelApplication from "../hooks/UseCancelApplication";
+import { applicationsContext } from "../contexts/ApplicationsContext";
 
 interface IApplicationComponentProps {
-  removeApplication: (application_id: number) => void;
   application: ApplicationPopulated;
 }
 
 const ApplicationComponent: React.FC<IApplicationComponentProps> = ({
   application,
-  removeApplication,
 }) => {
   const { error, cancelApplication } = useCancelApplication();
+  const { removeApplication } = useContext(applicationsContext)!;
 
+  /**invoke api call to remove application and remove it from context */
   const handleRemoveApplication = async () => {
-    const result = await cancelApplication(application.id);
-    if (result) removeApplication(application.id);
+    const isCanceled = await cancelApplication(application.id);
+    if (isCanceled) removeApplication(application.id);
   };
+
   return (
     <Card className="mb-5">
       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">

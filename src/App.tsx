@@ -12,22 +12,20 @@ import getLoggedCandidateAPI from "./apis/GetLoggedCandidateApi";
 function App() {
   const { hydrateAuth, auth, setCandidate } = useContext(authContext)!;
 
+  // fetch logged candidate data when we get token from local storage or after login
   useEffect(() => {
     async function hydrateAndGetLoggedCandidate() {
-      hydrateAuth();
-      console.log(auth.token);
-      const candidate = await getLoggedCandidateAPI(auth.token);
-      if (candidate.success === true) setCandidate(candidate.data);
+      if (auth.token) {
+        const candidate = await getLoggedCandidateAPI(auth.token);
+        if (candidate.success === true) setCandidate(candidate.data);
+      }
     }
     hydrateAndGetLoggedCandidate();
   }, [auth.token]);
 
+  // hydrate auth object on login
   useEffect(() => {
-    async function getCandidate() {
-      const response = await getLoggedCandidateAPI(auth.token);
-      if (response.success === true) setCandidate(response.data);
-    }
-    getCandidate();
+    hydrateAuth();
   }, []);
 
   return (

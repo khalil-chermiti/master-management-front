@@ -1,6 +1,6 @@
-import React, { createContext, useState } from "react";
 import type { IAuth } from "../types/types";
 import { Candidate } from "../types/CandidateTypes";
+import React, { createContext, useState } from "react";
 import getLoggedCandidateAPI from "../apis/GetLoggedCandidateApi";
 
 interface IAuthContext {
