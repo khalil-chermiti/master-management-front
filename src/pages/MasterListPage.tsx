@@ -1,26 +1,31 @@
-import UseError from "../hooks/UseError";
-import { useEffect, useState } from "react";
-import { Master } from "../types/MasterTypes";
+import { useContext, useEffect } from "react";
 import GetMasterApi from "../apis/GetMasterApi";
+import { mastersContext } from "../contexts/MastersContext";
 import MasterCardComponent from "../components/MasterCardComponent";
 
 const MasterListPage = () => {
-  const [masterList, setMasterList] = useState<Master[]>([]);
-  const { error, setIsLoading, setNotLoading, setErrorMsg } = UseError();
+  const { masters, hydrateMasters, persistMasters, addMaster } =
+    useContext(mastersContext)!;
 
+  /**fetch and add master to context */
   useEffect(() => {
     const fetchMasterList = async () => {
-      setIsLoading();
       const response = await GetMasterApi();
-      if (response.success === true) setMasterList(response.data.masters);
-      if (response.success === false) setErrorMsg(response.error);
-      setNotLoading();
+      if (response.success === true)
+        response.data.masters.forEach(master => addMaster(master));
     };
     fetchMasterList();
   }, []);
 
-  if (masterList.length === 0) return <h1>no masters</h1>;
-  if (error.isError) return <h1>{error.msg}</h1>;
+  /**hydrate masters list from localstorage */
+  useEffect(() => {
+    hydrateMasters();
+  });
+
+  /**persist masters list to localstorage */
+  useEffect(() => {
+    persistMasters();
+  }, [masters]);
 
   return (
     <section
@@ -30,7 +35,7 @@ const MasterListPage = () => {
       <h1 className="text-center mb-8 text-2xl font-extrabold leading-none tracking-tight text-blue-800 md:text-5xl lg:text-6xl dark:text-white">
         Masters List
       </h1>
-      {masterList.map(master => (
+      {masters.map(master => (
         <MasterCardComponent key={master.id} master={master} />
       ))}
     </section>
