@@ -9,7 +9,7 @@ const ApplicationsPage = () => {
 
   const {
     applications,
-    addApplication,
+    addApplications,
     hydrateApplications,
     persistApplications,
   } = useContext(applicationsContext)!;
@@ -19,8 +19,7 @@ const ApplicationsPage = () => {
     async function getApplications() {
       if (auth.token) {
         const response = await FetchApplicationsApi(auth.token);
-        if (response.success === true)
-          response.data.forEach(application => addApplication(application));
+        if (response.success === true) addApplications(response.data);
       }
     }
     getApplications();
@@ -29,11 +28,11 @@ const ApplicationsPage = () => {
   // hydrate Applications list from local storage
   useEffect(() => {
     hydrateApplications();
-  });
+  }, []);
 
   // persist Applications to local storage
   useEffect(() => {
-    persistApplications();
+    if (applications.length != 0) persistApplications();
   }, [applications]);
 
   return (

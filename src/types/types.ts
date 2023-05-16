@@ -36,6 +36,13 @@ export interface IAuth {
   isAuth: boolean;
   token: string | null;
   role: USER_TYPE;
-  user: Omit<Candidate, "password"> | null;
+  user: Omit<Candidate, "password"> | Responsible | null;
 }
 
+export type Responsible = {
+  id: number;
+  cin: number;
+  last_name: string;
+  first_name: string;
+  login: string;
+};

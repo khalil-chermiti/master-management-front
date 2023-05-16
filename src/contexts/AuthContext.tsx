@@ -1,14 +1,13 @@
-import type { IAuth } from "../types/types";
 import { Candidate } from "../types/CandidateTypes";
 import React, { createContext, useState } from "react";
-import getLoggedCandidateAPI from "../apis/GetLoggedCandidateApi";
-
+import type { IAuth, Responsible, USER_TYPE } from "../types/types";
 interface IAuthContext {
   auth: IAuth;
   logout: () => void;
-  setToken: (token: string) => void;
   hydrateAuth: () => void;
-  setCandidate: (candidate: Omit<Candidate, "password">) => void;
+  persistAuth: () => void;
+  setUser: (user: Omit<Candidate, "password"> | Responsible) => void;
+  setRoleAndToken: (token: string, role: USER_TYPE) => void;
 }
 
 interface IAuthContextProviderProps {
@@ -24,7 +23,7 @@ export const authContext = createContext<IAuthContext | null>(null);
  * @function hydrate : hydrate auth object from local storage
  * @example
  * const auth = useContext(authContext)
- * // now use the methods and properties bellow :
+ * now use the methods and properties bellow :
  * auth?.auth
  * auth?.hydrateAuth()
  * auth?.setToken("some token")
@@ -41,55 +40,43 @@ export const AuthContextProvider: React.FC<IAuthContextProviderProps> = ({
   });
 
   /**set new token after sign in success*/
-  const setToken = async (token: string) => {
-    setAuth(prev => ({ ...prev, isAuth: true, token: token }));
-    const response = await getLoggedCandidateAPI(token);
-    if (response.success) {
-      setAuthToLocalStorage({
-        isAuth: true,
-        token: token,
-        role: auth.role,
-        user: response.data,
-      });
-    }
+  const setRoleAndToken = (token: string, role: USER_TYPE) =>
+    setAuth(prev => ({ ...prev, isAuth: true, token, role }));
+
+  /**set current user data */
+  const setUser = (user: Omit<Candidate, "password"> | Responsible) => {
+    setAuth(prev => ({ ...prev, user }));
   };
 
-  const setCandidate = (candidate: Omit<Candidate, "password">) => {
-    setAuth(prev => ({ ...prev, user: candidate }));
-    setAuthToLocalStorage({
-      isAuth: true,
-      token: auth.token,
-      role: auth.role,
-      user: candidate,
-    });
-  };
-
-  const getAuthFromLocalStorage = () => {
-    const authFromLocal = window.localStorage.getItem("auth");
-    if (authFromLocal?.length === 0 || authFromLocal === null) return "";
-    return JSON.parse(window.localStorage.getItem("auth") || "") as IAuth | "";
-  };
-
+  /**delete user from local storage */
   const deleteAuthFromLocalStorage = () =>
     window.localStorage.removeItem("auth");
 
   /**hydrate auth from local storage */
   const hydrateAuth = () => {
-    const authFromLocal = getAuthFromLocalStorage();
-    if (authFromLocal !== "") setAuth(authFromLocal);
+    const authFromLocal = window.localStorage.getItem("auth");
+    if (authFromLocal?.length === 0 || authFromLocal === null) return;
+    setAuth(JSON.parse(window.localStorage.getItem("auth") || "") as IAuth);
   };
 
-  const setAuthToLocalStorage = (auth: IAuth) =>
+  const persistAuth = () =>
     window.localStorage.setItem("auth", JSON.stringify(auth));
 
   const logout = () => {
     deleteAuthFromLocalStorage();
-    setAuth(prev => ({ ...prev, isAuth: false, token: null }));
+    setAuth(prev => ({ ...prev, isAuth: false, token: null, user: null }));
   };
 
   return (
     <authContext.Provider
-      value={{ logout, setToken, auth, hydrateAuth, setCandidate }}
+      value={{
+        logout,
+        auth,
+        hydrateAuth,
+        setUser,
+        setRoleAndToken,
+        persistAuth,
+      }}
     >
       {children}
     </authContext.Provider>

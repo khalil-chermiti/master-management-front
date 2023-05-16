@@ -4,6 +4,7 @@ import { Master } from "../types/MasterTypes";
 interface IMasterContext {
   masters: Master[];
   addMaster: (master: Master) => void;
+  addMasters: (masterList: Master[]) => void;
   removeMaster: (masterID: number) => void;
   persistMasters: () => void;
   hydrateMasters: () => void;
@@ -23,8 +24,12 @@ export const MasterContextProvider: React.FC<
   /** adds master to context */
   const addMaster = (newMaster: Master) => {
     const exist = masters.find(master => master.id === newMaster.id);
-    if (!exist) setMasters(prev => [...prev, newMaster]);
+    console.log(exist);
+    if (exist) return;
+    setMasters(prev => [...prev, newMaster]);
   };
+
+  const addMasters = (mastersList: Master[]) => setMasters(mastersList);
 
   /** removes master from context */
   const removeMaster = (masterID: number) => {
@@ -39,17 +44,24 @@ export const MasterContextProvider: React.FC<
   /** hydrate masters from localstorage */
   const hydrateMasters = () => {
     const persistedMasters = window.localStorage.getItem("masters");
-    if (persistedMasters?.length === 0 || persistedMasters === null) return [];
+    if (persistedMasters?.length === 0 || persistedMasters === null) return;
 
-    return JSON.parse(
-      window.localStorage.getItem("applications") || ""
-    ) as Master[];
+    try {
+      const persistedMasters = JSON.parse(
+        window.localStorage.getItem("masters") || ""
+      ) as Master[];
+      setMasters(persistedMasters);
+      // persistedMasters.forEach(master => addMaster(master));
+    } catch {
+      console.log("error parsing json");
+    }
   };
 
   return (
     <mastersContext.Provider
       value={{
         masters,
+        addMasters,
         addMaster,
         removeMaster,
         persistMasters,

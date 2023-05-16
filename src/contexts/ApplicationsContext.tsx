@@ -3,7 +3,7 @@ import { ApplicationPopulated } from "../types/ApplicaitonTypes";
 
 interface IApplicationsContext {
   applications: ApplicationPopulated[];
-  addApplication: (application: ApplicationPopulated) => void;
+  addApplications: (application: ApplicationPopulated[]) => void;
   removeApplication: (applicationID: number) => void;
   persistApplications: () => void;
   hydrateApplications: () => void;
@@ -23,11 +23,9 @@ export const ApplicationContextProvider: React.FC<
 > = ({ children }) => {
   const [applications, setApplications] = useState<ApplicationPopulated[]>([]);
 
-  /** adds application to the Candidate applications context */
-  const addApplication = (application: ApplicationPopulated) => {
-    const exist = applications.find(app => app.id === application.id);
-    if (!exist) setApplications(prev => [...prev, application]);
-  };
+  /** adds applications to the Candidate applications context */
+  const addApplications = (applicationsList: ApplicationPopulated[]) =>
+    setApplications(applicationsList);
 
   /** removes application from the Candidate applications context */
   const removeApplication = (applicationID: number) => {
@@ -48,18 +46,23 @@ export const ApplicationContextProvider: React.FC<
   const hydrateApplications = () => {
     const persistedApplications = window.localStorage.getItem("applications");
     if (persistedApplications?.length === 0 || persistedApplications === null)
-      return [];
+      return;
 
-    return JSON.parse(
-      window.localStorage.getItem("applications") || ""
-    ) as ApplicationPopulated[];
+    try {
+      const persistedApplications = JSON.parse(
+        window.localStorage.getItem("applications") || ""
+      ) as ApplicationPopulated[];
+      setApplications(persistedApplications);
+    } catch {
+      console.log("error parsing json");
+    }
   };
 
   return (
     <applicationsContext.Provider
       value={{
         applications,
-        addApplication,
+        addApplications,
         removeApplication,
         persistApplications,
         hydrateApplications,

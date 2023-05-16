@@ -4,15 +4,14 @@ import { mastersContext } from "../contexts/MastersContext";
 import MasterCardComponent from "../components/MasterCardComponent";
 
 const MasterListPage = () => {
-  const { masters, hydrateMasters, persistMasters, addMaster } =
+  const { masters, hydrateMasters, persistMasters, addMasters } =
     useContext(mastersContext)!;
 
   /**fetch and add master to context */
   useEffect(() => {
     const fetchMasterList = async () => {
       const response = await GetMasterApi();
-      if (response.success === true)
-        response.data.masters.forEach(master => addMaster(master));
+      if (response.success === true) addMasters(response.data.masters);
     };
     fetchMasterList();
   }, []);
@@ -20,11 +19,11 @@ const MasterListPage = () => {
   /**hydrate masters list from localstorage */
   useEffect(() => {
     hydrateMasters();
-  });
+  }, []);
 
   /**persist masters list to localstorage */
   useEffect(() => {
-    persistMasters();
+    if (masters.length > 0) persistMasters();
   }, [masters]);
 
   return (
