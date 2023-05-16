@@ -6,6 +6,9 @@ import UseApplyForMaster from "../hooks/UseApplyForMaste";
 
 interface IMasterCardComponentProps {
   master: Master;
+  showApply: boolean;
+  showDelete: boolean;
+  showApplications: boolean;
 }
 
 const formatDate = (dateStr: string) => {
@@ -15,6 +18,9 @@ const formatDate = (dateStr: string) => {
 
 const MasterCardComponent: React.FC<IMasterCardComponentProps> = ({
   master,
+  showApply,
+  showDelete,
+  showApplications,
 }) => {
   const { success, applyToMaster, error } = UseApplyForMaster();
   return (
@@ -33,7 +39,11 @@ const MasterCardComponent: React.FC<IMasterCardComponentProps> = ({
 
       {error.isError && <ErrorMessage message={error.msg} />}
       {success.isSuccess && <SuccessMessage message={success.message} />}
-      <Button onClick={() => applyToMaster(master.id)}>Apply</Button>
+      {showDelete && <Button color={"failure"}>Delete</Button>}
+      {showApplications && <Button>Applications List</Button>}
+      {showApply && (
+        <Button onClick={() => applyToMaster(master.id)}>Apply</Button>
+      )}
     </Card>
   );
 };

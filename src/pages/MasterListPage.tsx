@@ -1,11 +1,14 @@
 import { useContext, useEffect } from "react";
 import GetMasterApi from "../apis/GetMasterApi";
+import { authContext } from "../contexts/AuthContext";
 import { mastersContext } from "../contexts/MastersContext";
 import MasterCardComponent from "../components/MasterCardComponent";
 
 const MasterListPage = () => {
   const { masters, hydrateMasters, persistMasters, addMasters } =
     useContext(mastersContext)!;
+
+  const { auth } = useContext(authContext)!;
 
   /**fetch and add master to context */
   useEffect(() => {
@@ -34,9 +37,25 @@ const MasterListPage = () => {
       <h1 className="text-center mb-8 text-2xl font-extrabold leading-none tracking-tight text-blue-800 md:text-5xl lg:text-6xl dark:text-white">
         Masters List
       </h1>
-      {masters.map(master => (
-        <MasterCardComponent key={master.id} master={master} />
-      ))}
+      {masters.map(master =>
+        auth.role === "ADMIN" ? (
+          <MasterCardComponent
+            key={master.id}
+            master={master}
+            showApply={false}
+            showApplications={true}
+            showDelete={true}
+          />
+        ) : (
+          <MasterCardComponent
+            key={master.id}
+            master={master}
+            showApply={true}
+            showApplications={false}
+            showDelete={false}
+          />
+        )
+      )}
     </section>
   );
 };

@@ -65,7 +65,7 @@ export const AuthContextProvider: React.FC<IAuthContextProviderProps> = ({
 
   const logout = () => {
     deleteAuthFromLocalStorage();
-    setAuth(prev => ({ ...prev, isAuth: false, token: null, user: null }));
+    setAuth(prev => ({ ...prev, isAuth: false, token: null, user: null , role : "CANDIDATE"}));
   };
 
   return (

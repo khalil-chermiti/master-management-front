@@ -9,14 +9,14 @@ import getLoggedAdminAPI from "./apis/getLoggedAdminApi";
 import NavBarComponent from "./components/NavBarComponent";
 import CandidateSignupPage from "./pages/CandidateSignupPage";
 import getLoggedCandidateAPI from "./apis/GetLoggedCandidateApi";
+import AddMasterComponent from "./components/AddMasterComponent";
 
 function App() {
   const { hydrateAuth, auth, setUser, persistAuth } = useContext(authContext)!;
 
-  console.log(auth);
   // fetch logged candidate data when we get token from local storage or after login
   useEffect(() => {
-    async function hydrateAndGetLoggedCandidate() {
+    async function GetLoggedCandidate() {
       if (auth.token && auth.role === "CANDIDATE") {
         const candidate = await getLoggedCandidateAPI(auth.token);
         if (candidate.success === true) setUser(candidate.data);
@@ -27,7 +27,7 @@ function App() {
         if (candidate.success === true) setUser(candidate.data);
       }
     }
-    hydrateAndGetLoggedCandidate();
+    GetLoggedCandidate();
   }, [auth.token]);
 
   // hydrate auth object on page load
@@ -51,14 +51,11 @@ function App() {
           path="/candidate/signin"
           element={<SigninPage USER_TYPE="CANDIDATE" />}
         />
+
         <Route path="/candidate/signup" element={<CandidateSignupPage />} />
-
-        <Route
-          path="/admin/signin"
-          element={<SigninPage USER_TYPE="ADMIN" />}
-        />
-
+        <Route path="/admin" element={<SigninPage USER_TYPE="ADMIN" />} />
         <Route path="/master" element={<MasterListPage />} />
+        <Route path="/master/add" element={<AddMasterComponent />} />
       </Routes>
     </>
   );
