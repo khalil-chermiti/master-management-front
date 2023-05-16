@@ -3,6 +3,7 @@ import { Button, Card } from "flowbite-react";
 import { Master } from "../types/MasterTypes";
 import SuccessMessage from "./SuccessMessage";
 import UseApplyForMaster from "../hooks/UseApplyForMaste";
+import useDeleteMaster from "../hooks/useDeleteMaster";
 
 interface IMasterCardComponentProps {
   master: Master;
@@ -23,6 +24,7 @@ const MasterCardComponent: React.FC<IMasterCardComponentProps> = ({
   showApplications,
 }) => {
   const { success, applyToMaster, error } = UseApplyForMaster();
+  const { handleDeleteMaster } = useDeleteMaster();
   return (
     <Card className="mb-5">
       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -39,7 +41,11 @@ const MasterCardComponent: React.FC<IMasterCardComponentProps> = ({
 
       {error.isError && <ErrorMessage message={error.msg} />}
       {success.isSuccess && <SuccessMessage message={success.message} />}
-      {showDelete && <Button color={"failure"}>Delete</Button>}
+      {showDelete && (
+        <Button onClick={() => handleDeleteMaster(master.id)} color={"failure"}>
+          Delete
+        </Button>
+      )}
       {showApplications && <Button>Applications List</Button>}
       {showApply && (
         <Button onClick={() => applyToMaster(master.id)}>Apply</Button>
