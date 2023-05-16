@@ -8,7 +8,7 @@ interface IUserProps {
   user: Omit<Candidate, "password"> | null;
 }
 
-const UserComponent: React.FC<IUserProps> = ({ user }) => {
+const CandidateHeaderComponent: React.FC<IUserProps> = ({ user }) => {
   const navigate = useNavigate();
   const { logout } = useContext(authContext)!;
 
@@ -34,7 +34,6 @@ const UserComponent: React.FC<IUserProps> = ({ user }) => {
             {user.email}
           </span>
         </Dropdown.Header>
-        <Dropdown.Item>Account</Dropdown.Item>
         <Dropdown.Item onClick={() => navigate("/applications")}>
           Applications
         </Dropdown.Item>
@@ -45,4 +44,4 @@ const UserComponent: React.FC<IUserProps> = ({ user }) => {
   );
 };
 
-export default UserComponent;
+export default CandidateHeaderComponent;

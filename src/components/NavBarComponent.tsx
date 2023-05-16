@@ -1,8 +1,10 @@
 import { useContext } from "react";
 import { Navbar } from "flowbite-react";
-import UserComponent from "./UserComponent";
 import { useNavigate } from "react-router-dom";
+import { Candidate } from "../types/CandidateTypes";
 import { authContext } from "../contexts/AuthContext";
+import AdminHeaderComponent from "./AdminHeaderComponent";
+import CandidateHeaderComponent from "./CandidateHeaderComponent";
 
 const NavBarComponent = () => {
   const navigate = useNavigate();
@@ -23,7 +25,9 @@ const NavBarComponent = () => {
           Master
         </span>
       </Navbar.Brand>
-      {auth.isAuth ? <UserComponent user={auth.user!} /> : ""}
+      {auth.isAuth && auth.role === "CANDIDATE" && (
+        <CandidateHeaderComponent user={auth.user! as Candidate} />
+      )}
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Navbar.Link
@@ -32,7 +36,10 @@ const NavBarComponent = () => {
         >
           Masters List
         </Navbar.Link>
-        {auth.isAuth === false ? (
+
+        {auth.isAuth && auth.role === "ADMIN" && <AdminHeaderComponent />}
+
+        {auth.isAuth === false && (
           <>
             <Navbar.Link
               className="cursor-pointer"
@@ -47,8 +54,6 @@ const NavBarComponent = () => {
               Signin
             </Navbar.Link>
           </>
-        ) : (
-          ""
         )}
       </Navbar.Collapse>
     </Navbar>

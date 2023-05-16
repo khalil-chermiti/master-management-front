@@ -1,6 +1,7 @@
 import { Candidate } from "../types/CandidateTypes";
 import React, { createContext, useState } from "react";
 import type { IAuth, Responsible, USER_TYPE } from "../types/types";
+
 interface IAuthContext {
   auth: IAuth;
   logout: () => void;
