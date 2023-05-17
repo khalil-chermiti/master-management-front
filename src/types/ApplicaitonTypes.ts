@@ -1,3 +1,4 @@
+import { Candidate } from "./CandidateTypes";
 import { Master } from "./MasterTypes";
 
 export type Application = {
@@ -10,4 +11,8 @@ export type Application = {
 
 export type ApplicationPopulated = Application & {
   master: Master;
+};
+
+export type ApplicationWithCandidate = Application & {
+  candidate: Candidate;
 };

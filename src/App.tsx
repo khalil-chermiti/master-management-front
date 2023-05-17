@@ -10,6 +10,7 @@ import NavBarComponent from "./components/NavBarComponent";
 import CandidateSignupPage from "./pages/CandidateSignupPage";
 import getLoggedCandidateAPI from "./apis/GetLoggedCandidateApi";
 import AddMasterComponent from "./components/AddMasterComponent";
+import ApplicationsPerMasterPage from "./pages/ApplicationsPerMasterPage";
 
 function App() {
   const { hydrateAuth, auth, setUser, persistAuth } = useContext(authContext)!;
@@ -56,6 +57,10 @@ function App() {
         <Route path="/admin" element={<SigninPage USER_TYPE="ADMIN" />} />
         <Route path="/master" element={<MasterListPage />} />
         <Route path="/master/add" element={<AddMasterComponent />} />
+        <Route
+          path="/master/:masterID/applications"
+          element={<ApplicationsPerMasterPage />}
+        />
       </Routes>
     </>
   );

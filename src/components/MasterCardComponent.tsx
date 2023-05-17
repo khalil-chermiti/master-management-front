@@ -2,8 +2,9 @@ import ErrorMessage from "./ErrorComponenet";
 import { Button, Card } from "flowbite-react";
 import { Master } from "../types/MasterTypes";
 import SuccessMessage from "./SuccessMessage";
-import UseApplyForMaster from "../hooks/UseApplyForMaste";
+import { useNavigate } from "react-router-dom";
 import useDeleteMaster from "../hooks/useDeleteMaster";
+import UseApplyForMaster from "../hooks/UseApplyForMaste";
 
 interface IMasterCardComponentProps {
   master: Master;
@@ -25,6 +26,8 @@ const MasterCardComponent: React.FC<IMasterCardComponentProps> = ({
 }) => {
   const { success, applyToMaster, error } = UseApplyForMaster();
   const { handleDeleteMaster } = useDeleteMaster();
+  const navigate = useNavigate();
+
   return (
     <Card className="mb-5">
       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -46,7 +49,11 @@ const MasterCardComponent: React.FC<IMasterCardComponentProps> = ({
           Delete
         </Button>
       )}
-      {showApplications && <Button>Applications List</Button>}
+      {showApplications && (
+        <Button onClick={() => navigate(`/master/${master.id}/applications`)}>
+          Applications List
+        </Button>
+      )}
       {showApply && (
         <Button onClick={() => applyToMaster(master.id)}>Apply</Button>
       )}
