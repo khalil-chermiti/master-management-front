@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { Alert, Button, Card } from "flowbite-react";
 import BadgeComponent from "./BadgeComponent";
+import { Alert, Button, Card } from "flowbite-react";
 import { ApplicationPopulated } from "../types/ApplicaitonTypes";
 import useCancelApplication from "../hooks/UseCancelApplication";
 import { applicationsContext } from "../contexts/ApplicationsContext";
@@ -51,7 +51,9 @@ const ApplicationComponent: React.FC<IApplicationComponentProps> = ({
       )}
       <Button
         onClick={() => {
-          handleRemoveApplication();
+          const isDelete = confirm("cancel application");
+          if (isDelete)
+            handleRemoveApplication();
         }}
         color="failure"
       >

@@ -1,6 +1,7 @@
 import { Button } from "flowbite-react";
 import BadgeComponent from "./BadgeComponent";
 import { ApplicationWithCandidate } from "../types/ApplicaitonTypes";
+import useGetMasterApplications from "../hooks/useGetMasterApplications";
 
 interface IMastersApplicationsComponenet {
   application: ApplicationWithCandidate;
@@ -9,7 +10,9 @@ interface IMastersApplicationsComponenet {
 export const MastersApplicationsComponent: React.FC<
   IMastersApplicationsComponenet
 > = ({ application }) => {
-  console.log(application);
+  const { handleAcceptApplication, handleRejectApplication } =
+    useGetMasterApplications();
+
   return (
     <li className="py-3 sm:py-4">
       <div className="flex items-center space-x-4">
@@ -26,15 +29,26 @@ export const MastersApplicationsComponent: React.FC<
 
         {/* show both button */}
         <BadgeComponent status={application.status} />
+
         {application.status === "PENDING" && (
           <>
             <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-              <Button size={"xs"} outline={true} color={"success"}>
+              <Button
+                onClick={() => handleAcceptApplication(application.id)}
+                size={"xs"}
+                outline={true}
+                color={"success"}
+              >
                 Accept
               </Button>
             </div>
             <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-              <Button size={"xs"} outline={true} color={"failure"}>
+              <Button
+                onClick={() => handleRejectApplication(application.id)}
+                size={"xs"}
+                outline={true}
+                color={"failure"}
+              >
                 Reject
               </Button>
             </div>
@@ -43,15 +57,25 @@ export const MastersApplicationsComponent: React.FC<
 
         {application.status === "ACCEPTED" && (
           <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-            <Button size={"xs"} outline={true} color={"failure"}>
+            <Button
+              onClick={() => handleRejectApplication(application.id)}
+              size={"xs"}
+              outline={true}
+              color={"failure"}
+            >
               Reject
             </Button>
           </div>
         )}
 
-        {application.status === "ACCEPTED" && (
+        {application.status === "REJECTED" && (
           <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-            <Button size={"xs"} outline={true} color={"failure"}>
+            <Button
+              onClick={() => handleAcceptApplication(application.id)}
+              size={"xs"}
+              outline={true}
+              color={"success"}
+            >
               Accept
             </Button>
           </div>

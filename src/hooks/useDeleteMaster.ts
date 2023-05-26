@@ -8,14 +8,8 @@ const useDeleteMaster = () => {
   const { removeMaster } = useContext(mastersContext)!;
 
   const handleDeleteMaster = async (masterID: number) => {
-    console.log("id :", masterID);
     const response = await DeleteMasterAPI(masterID, auth.token);
-    if (response.success === true) {
-      removeMaster(masterID);
-      console.log("master was deleted");
-    }
-
-    console.log(response);
+    if (response.success === true) removeMaster(masterID);
   };
 
   return { handleDeleteMaster };

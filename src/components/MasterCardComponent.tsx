@@ -10,6 +10,7 @@ interface IMasterCardComponentProps {
   master: Master;
   showApply: boolean;
   showDelete: boolean;
+  showUpdate: boolean;
   showApplications: boolean;
 }
 
@@ -22,6 +23,7 @@ const MasterCardComponent: React.FC<IMasterCardComponentProps> = ({
   master,
   showApply,
   showDelete,
+  showUpdate,
   showApplications,
 }) => {
   const { success, applyToMaster, error } = UseApplyForMaster();
@@ -49,6 +51,16 @@ const MasterCardComponent: React.FC<IMasterCardComponentProps> = ({
           Delete
         </Button>
       )}
+
+      {showUpdate && (
+        <Button
+          onClick={() => navigate(`/master/update/${master.id}`)}
+          color={"warning"}
+        >
+          Update
+        </Button>
+      )}
+
       {showApplications && (
         <Button onClick={() => navigate(`/master/${master.id}/applications`)}>
           Applications List

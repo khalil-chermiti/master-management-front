@@ -45,6 +45,7 @@ const MasterListPage = () => {
             showApply={false}
             showApplications={true}
             showDelete={true}
+            showUpdate={true}
           />
         ) : (
           <MasterCardComponent
@@ -53,6 +54,7 @@ const MasterListPage = () => {
             showApply={true}
             showApplications={false}
             showDelete={false}
+            showUpdate={false}
           />
         )
       )}

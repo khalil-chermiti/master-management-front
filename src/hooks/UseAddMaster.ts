@@ -34,7 +34,6 @@ function useAddMaster() {
     if (response.success === true) {
       clearErrorMsg();
       setSuccess("successfully add new master");
-      console.log(response.data.master);
     }
 
     if (response.success === false) {

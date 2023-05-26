@@ -24,7 +24,6 @@ export const MasterContextProvider: React.FC<
   /** adds master to context */
   const addMaster = (newMaster: Master) => {
     const exist = masters.find(master => master.id === newMaster.id);
-    console.log(exist);
     if (exist) return;
     setMasters(prev => [...prev, newMaster]);
   };
